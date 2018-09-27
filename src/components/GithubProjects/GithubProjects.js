@@ -61,6 +61,7 @@ class GithubProjects extends Component {
       prevState.page !== page
     ) {
       this.setState({ loading: true });
+      console.log(page);
       const { projects, totalPages } = await api.fetchers.fetchProjects({
         license,
         projectName,
@@ -74,10 +75,11 @@ class GithubProjects extends Component {
     }
   }
 
-  handleLicenseChange = ({ value }) => this.setState({ license: value });
+  handleLicenseChange = ({ value }) =>
+    this.setState({ license: value, page: 1 });
 
   handleProjectNameChange = ({ value }) =>
-    this.setState({ projectName: value });
+    this.setState({ projectName: value, page: 1 });
 
   onPageChange = ({ selected }) => this.setState({ page: selected + 1 });
 
@@ -98,6 +100,7 @@ class GithubProjects extends Component {
             containerClassName="ReactPaginate"
             pageCount={totalPages > 34 ? 34 : totalPages}
             onPageChange={debounce(this.onPageChange, 150)}
+            forcePage={this.state.page - 1}
           />
         )}
         <EnhanceProjectList projects={projects} loading={loading} />
