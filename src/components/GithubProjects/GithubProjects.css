@@ -4,3 +4,9 @@
   justify-content: center;
   flex-direction: column;
 }
+
+@media (max-width: 768px) {
+  .GithubProjects {
+    font-size: 0.9em;
+  }
+}
