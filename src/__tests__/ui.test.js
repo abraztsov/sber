@@ -1,13 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Input from '../components/ui/Input';
+import { Input } from '../components/ui/Input';
 import Select from '../components/ui/Select';
 
 describe('<Input />', () => {
   it('change value by passed props', () => {
-    const wrapper = shallow(<Input value="foo" />);
+    const wrapper = shallow(<Input state={{ value: 'foo' }} />);
     expect(wrapper.find('input').props().value).toEqual('foo');
-    wrapper.setProps({ value: 'bar' });
+    wrapper.setProps({ state: { value: 'bar' } });
     expect(wrapper.find('input').props().value).toEqual('bar');
   });
 });

@@ -1,12 +1,11 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import 'jest-dom/extend-expect';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { render, wait } from 'react-testing-library';
 import GithubProjects from '../components/GithubProjects/GithubProjects';
 import localStorage from '../localStorageMock';
-
 window.localStorage = localStorage;
 
 const mock = new MockAdapter(axios);
@@ -17,11 +16,11 @@ describe('<GithubProjects />', () => {
   });
 
   it('renders Input component', () => {
-    const wrapper = shallow(<GithubProjects />);
+    const wrapper = mount(<GithubProjects />);
     expect(wrapper.find('Input')).toHaveLength(1);
   });
   it('renders Select component', () => {
-    const wrapper = shallow(<GithubProjects />);
+    const wrapper = mount(<GithubProjects />);
     expect(wrapper.find('Select')).toHaveLength(1);
   });
   it('renders all fetched projects', async () => {

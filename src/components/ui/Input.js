@@ -3,7 +3,7 @@ import { withState } from 'recompose';
 
 const enhance = withState('state', 'setState', { value: '' });
 
-const Input = enhance(({ state, setState, onChange }) => (
+const Input = ({ state, setState, onChange }) => (
   <input
     value={state.value}
     type="text"
@@ -13,6 +13,7 @@ const Input = enhance(({ state, setState, onChange }) => (
       onChange({ event: e, value });
     }}
   />
-));
+);
 
-export default Input;
+export { Input };
+export default enhance(Input);
