@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
+import { branch, renderComponent, compose } from 'recompose';
 
 import ProjectList from '../ProjectList';
 import Select from '../ui/Select';
@@ -9,7 +10,12 @@ import { LICENSE_LIST } from '../../const.js';
 import api from '../../api';
 import './GithubProjects.css';
 
-class App extends Component {
+const Loader = () => <div>Loading...</div>;
+const isLoading = ({ loading }) => loading;
+const withLoadingTextWhileLoading = branch(isLoading, renderComponent(Loader));
+const EnhanceProjectList = compose(withLoadingTextWhileLoading)(ProjectList);
+
+class GithubProjects extends Component {
   constructor() {
     super();
 
@@ -72,7 +78,7 @@ class App extends Component {
     this.setState({ projectName: value });
 
   render() {
-    const { license, projectName, projects } = this.state;
+    const { license, projectName, projects, loading } = this.state;
 
     return (
       <div className="GithubProjects">
@@ -83,10 +89,10 @@ class App extends Component {
           options={LICENSE_LIST}
         />
         <Input onChange={this.handleProjectNameChange} value={projectName} />
-        <ProjectList projects={projects} />
+        <EnhanceProjectList projects={projects} loading={loading} />
       </div>
     );
   }
 }
 
-export default App;
+export default GithubProjects;
