@@ -12,6 +12,7 @@
     "normalize.css": "^8.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-paginate": "^5.2.4",
     "react-scripts": "1.1.5",
     "react-test-renderer": "^16.5.2",
     "react-testing-library": "^5.1.0",

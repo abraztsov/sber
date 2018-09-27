@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import debounce from 'lodash.debounce';
 import { branch, renderComponent, compose } from 'recompose';
+import ReactPaginate from 'react-paginate';
 
 import ProjectList from '../ProjectList';
 import Select from '../ui/Select';
@@ -28,57 +29,60 @@ class GithubProjects extends Component {
       license: LICENSE_LIST[0],
       projectName: '',
       projects,
-      loading: !projects.length
+      loading: !projects.length,
+      page: 1,
+      totalPages: null
     };
   }
 
   async componentDidMount() {
-    const { license, projectName, projects } = this.state;
-    // console.log(api);
+    const { license, projectName, projects, page } = this.state;
+
     if (!projects.length) {
       try {
-        const projects = await api.fetchers.fetchProjects({
+        const { projects, totalPages } = await api.fetchers.fetchProjects({
           license,
-          projectName
+          projectName,
+          page
         });
-        this.setState({ projects, loading: false });
+        this.setState({ projects, loading: false, totalPages });
       } catch (error) {
         console.error(error.message);
       }
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { license, projectName, projects } = this.state;
+  async componentDidUpdate(prevProps, prevState) {
+    const { license, projectName, page } = this.state;
 
     if (
       prevState.license !== license ||
-      prevState.projectName !== projectName
+      prevState.projectName !== projectName ||
+      prevState.page !== page
     ) {
-      this.fetchProjectsWithDebounce({ license, projectName });
-    }
-
-    if (projects && projects.length > 0)
-      localStorage.setItem('githubProjects', JSON.stringify(projects));
-  }
-
-  fetchProjectsWithDebounce = debounce(async params => {
-    try {
       this.setState({ loading: true });
-      const projects = await api.fetchers.fetchProjects(params);
-      this.setState({ projects, loading: false });
-    } catch (error) {
-      console.error(error.message);
+      const { projects, totalPages } = await api.fetchers.fetchProjects({
+        license,
+        projectName,
+        page
+      });
+      this.setState({ projects, loading: false, totalPages });
+
+      if (projects && projects.length > 0) {
+        await localStorage.setItem('githubProjects', JSON.stringify(projects));
+      }
     }
-  }, 150);
+  }
 
   handleLicenseChange = ({ value }) => this.setState({ license: value });
 
   handleProjectNameChange = ({ value }) =>
     this.setState({ projectName: value });
 
+  onPageChange = ({ selected }) => this.setState({ page: selected + 1 });
+
   render() {
-    const { license, projectName, projects, loading } = this.state;
+    const { license, projects, loading, totalPages } = this.state;
 
     return (
       <div className="GithubProjects">
@@ -88,7 +92,14 @@ class GithubProjects extends Component {
           value={license}
           options={LICENSE_LIST}
         />
-        <Input onChange={this.handleProjectNameChange} value={projectName} />
+        <Input onChange={debounce(this.handleProjectNameChange, 150)} />
+        {!!totalPages && (
+          <ReactPaginate
+            containerClassName="ReactPaginate"
+            pageCount={totalPages > 34 ? 34 : totalPages}
+            onPageChange={debounce(this.onPageChange, 150)}
+          />
+        )}
         <EnhanceProjectList projects={projects} loading={loading} />
       </div>
     );

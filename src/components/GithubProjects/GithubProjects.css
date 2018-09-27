@@ -5,6 +5,19 @@
   flex-direction: column;
 }
 
+.ReactPaginate {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+.ReactPaginate li a {
+  cursor: pointer;
+  padding: 0 5px;
+}
+.ReactPaginate .selected a {
+  color: red;
+}
+
 @media (max-width: 768px) {
   .GithubProjects {
     font-size: 0.9em;
