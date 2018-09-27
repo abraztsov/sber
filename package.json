@@ -4,11 +4,17 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.15.0",
+    "enzyme": "^3.6.0",
+    "enzyme-adapter-react-16": "^1.5.0",
+    "jest-dom": "^1.12.1",
     "lodash.debounce": "^4.0.8",
     "normalize.css": "^8.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "1.1.5",
+    "react-test-renderer": "^16.5.2",
+    "react-testing-library": "^5.1.0",
     "recompose": "^0.30.0"
   },
   "scripts": {
