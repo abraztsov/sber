@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App';
+import GithubProjects from './components/GithubProjects';
 import registerServiceWorker from './registerServiceWorker';
 import 'normalize.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<GithubProjects />, document.getElementById('root'));
 registerServiceWorker();

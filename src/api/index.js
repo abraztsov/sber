@@ -1,2 +1,2 @@
-import wrappers from './wrappers';
-export default { wrappers };
+import fetchers from './fetchers';
+export default { fetchers };
