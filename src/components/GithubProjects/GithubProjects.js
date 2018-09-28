@@ -6,7 +6,7 @@ import ReactPaginate from 'react-paginate';
 import ProjectList from '../ProjectList';
 import Select from '../ui/Select';
 import Input from '../ui/Input';
-
+import { helpers } from '../utils';
 import { LICENSE_LIST } from '../../const.js';
 import api from '../../api';
 import './GithubProjects.css';
@@ -14,7 +14,14 @@ import './GithubProjects.css';
 const Loader = () => <div>Loading...</div>;
 const isLoading = ({ loading }) => loading;
 const withLoadingTextWhileLoading = branch(isLoading, renderComponent(Loader));
-const EnhanceProjectList = compose(withLoadingTextWhileLoading)(ProjectList);
+const { setToLocalStorageOnPropsUpdate } = helpers;
+const EnhanceProjectList = compose(
+  setToLocalStorageOnPropsUpdate({
+    propName: 'projects',
+    itemName: 'githubProjects'
+  }),
+  withLoadingTextWhileLoading
+)(ProjectList);
 
 class GithubProjects extends Component {
   constructor() {
@@ -61,17 +68,12 @@ class GithubProjects extends Component {
       prevState.page !== page
     ) {
       this.setState({ loading: true });
-      console.log(page);
       const { projects, totalPages } = await api.fetchers.fetchProjects({
         license,
         projectName,
         page
       });
       this.setState({ projects, loading: false, totalPages });
-
-      if (projects && projects.length > 0) {
-        await localStorage.setItem('githubProjects', JSON.stringify(projects));
-      }
     }
   }
 
